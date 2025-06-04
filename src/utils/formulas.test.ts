@@ -21,6 +21,15 @@ describe('calculateScore', () => {
     expect(result).toBeCloseTo(2.6666, 3);
   });
 
+  it('returns 0 for harmonic mean when any signal is zero', () => {
+    const signals: Signal[] = [
+      { id: '1', name: 'A', value: 0, weight: 1, isFormula: false },
+      { id: '2', name: 'B', value: 0.5, weight: 1, isFormula: false }
+    ];
+    const result = calculateScore('harmonicMean', signals);
+    expect(result).toBe(0);
+  });
+
   it('calculates probabilistic OR correctly', () => {
     const signals: Signal[] = [
       { id: '1', name: 'A', value: 0.5, weight: 1, isFormula: false },

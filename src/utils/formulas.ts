@@ -29,11 +29,19 @@ function weightedArithmeticMean(signals: Signal[]): number {
   return weightedSum / totalWeight;
 }
 function weightedHarmonicMean(signals: Signal[]): number {
-  const validSignals = signals.filter(signal => signal.value > 0);
-  if (validSignals.length === 0) return 0;
-  const totalWeight = validSignals.reduce((acc, signal) => acc + signal.weight, 0);
+  const totalWeight = signals.reduce((acc, signal) => acc + signal.weight, 0);
   if (totalWeight === 0) return 0;
-  const weightedReciprocalSum = validSignals.reduce((acc, signal) => acc + signal.weight / signal.value, 0);
+
+  // If any positively weighted signal has a value of 0 or less,
+  // the harmonic mean should be 0.
+  if (signals.some(signal => signal.weight > 0 && signal.value <= 0)) {
+    return 0;
+  }
+
+  const weightedReciprocalSum = signals.reduce(
+    (acc, signal) => acc + signal.weight / signal.value,
+    0
+  );
   return totalWeight / weightedReciprocalSum;
 }
 function weightedProbabilisticOr(signals: Signal[]): number {
